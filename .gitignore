@@ -1,0 +1,11 @@
+# Dossiers Python
+**/venv/
+**/__pycache__/
+*.pyc
+
+# Base de données locale (très important de ne pas l'envoyer)
+backend/ventes.db
+backend/data/
+
+# Fichiers système
+.DS_Store

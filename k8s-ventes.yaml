@@ -1,0 +1,72 @@
+# 1. RÉSERVATION DU DISQUE DUR
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlite-pvc
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+---
+# 2. SERVICE INTERNE BACKEND
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector: {app: backend-vente}
+  ports: [{protocol: TCP, port: 8000, targetPort: 8000}]
+---
+# 3. LE DÉPLOIEMENT DU BACKEND
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-vente
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: backend-vente}
+  template:
+    metadata:
+      labels: {app: backend-vente}
+    spec:
+      containers:
+      - name: backend-vente
+        image: europe-west1-docker.pkg.dev/ID_PROJET/repo-ventes/backend-vente:v1
+        volumeMounts:
+        - name: storage-ventes
+          mountPath: /app/data
+      volumes:
+      - name: storage-ventes
+        persistentVolumeClaim: {claimName: sqlite-pvc}
+---
+# 4. LE DÉPLOIEMENT DU FRONTEND
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-vente
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: frontend-vente}
+  template:
+    metadata:
+      labels: {app: frontend-vente}
+    spec:
+      containers:
+      - name: frontend-vente
+        image: europe-west1-docker.pkg.dev/ID_PROJET/repo-ventes/frontend-vente:v1
+        env:
+        - name: BACKEND_URL
+          value: "http://backend-service:8000"
+---
+# 5. L'URL PUBLIQUE (Load Balancer)
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-lb
+spec:
+  type: LoadBalancer
+  selector: {app: frontend-vente}
+  ports: [{protocol: TCP, port: 80, targetPort: 8501}]

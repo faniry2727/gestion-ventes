@@ -1,0 +1,20 @@
+name: CI-Ventes-Check
+
+# Ce script se lance à chaque fois que vous faites un "git push"
+on: [push]
+
+jobs:
+  test-docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v3
+
+      - name: Build image Backend
+        run: docker build ./backend -t backend-test
+
+      - name: Build image Frontend
+        run: docker build ./frontend -t frontend-test
+
+      - name: Verification Reussie
+        run: echo "Bravo ! Les images Docker sont valides et pretes pour Google Cloud."

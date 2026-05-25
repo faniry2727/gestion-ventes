@@ -33,7 +33,8 @@ spec:
     spec:
       containers:
       - name: backend-vente
-        image: europe-west1-docker.pkg.dev/ID_PROJET/repo-ventes/backend-vente:v1
+        # CORRECTION ICI : Remplacement par projet2-497011
+        image: europe-west1-docker.pkg.dev/projet2-497011/repo-ventes/backend-vente:v1
         volumeMounts:
         - name: storage-ventes
           mountPath: /app/data
@@ -56,7 +57,8 @@ spec:
     spec:
       containers:
       - name: frontend-vente
-        image: europe-west1-docker.pkg.dev/ID_PROJET/repo-ventes/frontend-vente:v1
+        # CORRECTION ICI : Remplacement par projet2-497011
+        image: europe-west1-docker.pkg.dev/projet2-497011/repo-ventes/frontend-vente:v1
         env:
         - name: BACKEND_URL
           value: "http://backend-service:8000"

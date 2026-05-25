@@ -64,9 +64,9 @@ if not st.session_state["auth"]:
 # --- INTERFACE PRINCIPALE ---
 else:
     with st.sidebar:
-        st.image("https://cdn-icons-png.flaticon.com/512/3258/3258446.png", width=80)
-        st.title("SalesManager")
-        if st.button("🚪 Déconnexion", use_container_width=True):
+       # st.image("https://cdn-icons-png.flaticon.com/512/3258/3258446.png", width=80)
+        st.title("Responsable des ventes")
+        if st.button("Déconnexion", use_container_width=True):
             st.session_state["auth"] = False
             st.rerun()
 
